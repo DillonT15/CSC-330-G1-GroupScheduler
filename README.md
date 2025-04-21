@@ -1,5 +1,5 @@
-# CSC321-G1-GroupScheduler
-CSC-321 Group 1 final project based on Option 2: Group Scheduler.
+# CSC330-G1-GroupScheduler
+CSC-330 Group 1 final project based on Option 2: Group Scheduler.
 
 Dillon Tall, Sebastian Scrimenti, Antonio Cavanaugh Lillo, Kevin Tran, Chris Meeks
 

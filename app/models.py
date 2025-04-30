@@ -20,6 +20,22 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
 
+class Thread(db.Model):
+    thread_id = db.Column(db.Integer, primary_key=True) #Should this be a thread id? or just id, and for the prior class ids the same question
+    title = db.Column(db.String(100), nullable=False)
+    #messages = db.relationship('Message', backref='thread', lazy=True) #? add messages
+    study_group_id = db.Column(db.Integer, db.ForeignKey('study_group.id'), nullable=False)
+
+class Post(db.Model):
+    post_id = db.Column(db.Integer, primary_key=True)
+    thread_id = db.Column(db.Integer, db.ForeignKey('thread.thread_id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    description =  db.Column(db.Text)
+    meeting_time = db.Column(db.String(100))
+
+    
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))

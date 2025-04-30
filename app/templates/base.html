@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #fefefe;
+            background-color: #eceef1;
             color: #1c1c1c;
             margin: 0;
             display: flex;
@@ -30,7 +30,7 @@
             margin: auto;
         }
         .nav-brand {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #007bff;
             text-decoration: none;
@@ -39,6 +39,7 @@
             margin-left: 1.25rem;
             text-decoration: none;
             font-weight: 500;
+            font-size: 1rem;
             color: #555;
             transition: color 0.2s;
         }
@@ -54,6 +55,7 @@
             font-size: 2.2rem;
             font-weight: 500;
             margin: 0;
+            color: #007bff;
         }
         header p {
             font-size: 1rem;
@@ -221,7 +223,7 @@
     </div>
 
     <footer>
-        {{ current_year }} Student Forum | CSC 330 - Team 1
+        &copy; {{ current_year }} Student Forum | CSC 330 Team 1
     </footer>
 
     {% block extra_scripts %}{% endblock %}

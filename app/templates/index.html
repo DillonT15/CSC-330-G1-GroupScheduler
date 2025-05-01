@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+  <h1>SCSU Study Group Scheduler</h1>
+
+  <ul>
+    <li><a href="{{ url_for('main.post_listing') }}">Post Study Group Listing</a></li>
+    <li><a href="{{ url_for('main.browse_listings') }}">Browse Study Groups</a></li>
+    <li><a href="{{ url_for('main.edit_profile') }}">Edit Profile</a></li>
+    <li><a href="{{ url_for('main.view_notifications') }}">View Notifications</a></li>
+  </ul>
+  
+{% endblock %}

@@ -1,35 +1,39 @@
 {% extends 'base.html' %}
 {% block title %}Register{% endblock %}
+
 {% block content %}
-  <h2>Register</h2>
+  <div class="form-wrapper">
+    <h2 class="form-heading">Create an Account</h2>
+    <form method="POST">
+      {{ form.hidden_tag() }}
 
-  <form method="POST">
-    {{ form.hidden_tag() }}
-
-    <!--Added error rendering for each error case, prints out all errors in red-->
-    <!--Also asks first for email instead of username now-->
-    {{ form.email.label }} {{ form.email() }}<br>
-
+      <div class="form-group">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control", placeholder="Enter your SCSU email") }}
         {% for error in form.email.errors %}
-          <span style="color: red;">{{ error }}</span><br>
+          <span style="color: red;">{{ error }}</span>
         {% endfor %}
-    <!--Display password error-->
-    {{ form.password.label }} {{ form.password() }}<br>
+      </div>
 
+      <div class="form-group">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control", placeholder="Enter a password") }}
         {% for error in form.password.errors %}
-          <span style="color: red;">{{ error }}</span><br>
+          <span style="color: red;">{{ error }}</span>
         {% endfor %}
+      </div>
 
-        
-    {{ form.confirm.label }} {{ form.confirm() }}<br>
-
+      <div class="form-group">
+        {{ form.confirm.label(class="form-label") }}
+        {{ form.confirm(class="form-control", placeholder="Confirm your password") }}
         {% for error in form.confirm.errors %}
-          <span style="color: red;">{{ error }}</span><br>
+          <span style="color: red;">{{ error }}</span>
         {% endfor %}
+      </div>
 
-    {{ form.submit() }}
-    
-  </form>
-
-
+      <div class="form-group">
+        {{ form.submit(class="form-submit") }}
+      </div>
+    </form>
+  </div>
 {% endblock %}

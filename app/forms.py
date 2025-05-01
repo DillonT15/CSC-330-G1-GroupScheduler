@@ -23,6 +23,7 @@ class RegisterForm(FlaskForm):
         if existing_user:
             raise ValidationError('An account with this email already exists.')
         
+
 class CreateStudyGroupForm(FlaskForm):
     title = StringField('Group Title', validators=[DataRequired(), Length(max=100)])
     subject = StringField('Subject/Course', validators=[DataRequired(), Length(max=100)])

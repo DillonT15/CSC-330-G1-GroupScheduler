@@ -1,5 +1,10 @@
 from . import db, login_manager
 from flask_login import UserMixin
+from datetime import datetime
+
+group_members = db.Table('group_members',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('study_group_id', db.Integer, db.ForeignKey('study_group.id'), primary_key=True))
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,6 +13,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     major = db.Column(db.String(100))
     is_admin = db.Column(db.Boolean, default=False)
+    is_verified = db.Column(db.Boolean, default=False)
 
 class StudyGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)

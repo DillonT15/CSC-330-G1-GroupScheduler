@@ -16,20 +16,23 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
             return redirect(url_for('main.index'))
         else:
-            flash('Invalid username or password.')
+            flash('Invalid email or password.')
     return render_template('login.html', form=form)
+
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        email = form.email.data
         hashed_password = generate_password_hash(form.password.data)
-        user = User(username=form.username.data, password=hashed_password)
+        # Create and store the new user
+        user = User(email=email, password=hashed_password, is_verified=True)
         db.session.add(user)
         db.session.commit()
         flash('Account created! You can now log in.')
@@ -41,3 +44,22 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
+
+
+#New routes created for each functionality
+@bp.route('/post-listing')
+def post_listing():
+    return render_template('post_listing.html')
+
+@bp.route('/browse')
+def browse_listings():
+    return render_template('browse_listings.html')
+
+@bp.route('/edit-profile')
+def edit_profile():
+    return render_template('edit_profile.html')
+
+@bp.route('/notifications')
+def view_notifications():
+    return render_template('notifications.html')

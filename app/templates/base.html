@@ -6,9 +6,15 @@
 </head>
 <body>
   <nav>
+
+
     {% if current_user.is_authenticated %}
-      <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('main.logout') }}">Logout</a></p>
+      <!--Added home button to quickly go back to main page-->
+      <p>Welcome, {{ current_user.email}} <a href="{{url_for('main.index')}}">Home</a> | <a href="{{ url_for('main.logout') }}">Logout</a></p>
     {% else %}
+     
+    
+      <a href="{{url_for('main.index')}}">Home</a> |
       <a href="{{ url_for('main.login') }}">Login</a> |
       <a href="{{ url_for('main.register') }}">Register</a>
     {% endif %}

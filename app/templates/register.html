@@ -2,11 +2,34 @@
 {% block title %}Register{% endblock %}
 {% block content %}
   <h2>Register</h2>
+
   <form method="POST">
     {{ form.hidden_tag() }}
-    {{ form.username.label }} {{ form.username() }}<br>
+
+    <!--Added error rendering for each error case, prints out all errors in red-->
+    <!--Also asks first for email instead of username now-->
+    {{ form.email.label }} {{ form.email() }}<br>
+
+        {% for error in form.email.errors %}
+          <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    <!--Display password error-->
     {{ form.password.label }} {{ form.password() }}<br>
+
+        {% for error in form.password.errors %}
+          <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+
+        
     {{ form.confirm.label }} {{ form.confirm() }}<br>
+
+        {% for error in form.confirm.errors %}
+          <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+
     {{ form.submit() }}
+    
   </form>
+
+
 {% endblock %}

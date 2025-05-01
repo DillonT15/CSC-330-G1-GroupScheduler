@@ -4,10 +4,12 @@
   <h1>SCSU Study Group Scheduler</h1>
 
   <ul>
+    <!--Redirects for each route/feature. Change to button or menu later-->
     <li><a href="{{ url_for('main.post_listing') }}">Post Study Group Listing</a></li>
     <li><a href="{{ url_for('main.browse_listings') }}">Browse Study Groups</a></li>
     <li><a href="{{ url_for('main.edit_profile') }}">Edit Profile</a></li>
-    <li><a href="{{ url_for('main.view_notifications') }}">View Notifications</a></li>
+    <li><a href="{{ url_for('main.view_notifications') }}">View Notifications/Messages</a></li>
   </ul>
+
   
 {% endblock %}

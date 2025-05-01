@@ -47,7 +47,7 @@ def logout():
 
 
 
-#New routes created for each functionality
+#New Placeholder routes created for each functionality on main page
 @bp.route('/post-listing')
 def post_listing():
     return render_template('post_listing.html')

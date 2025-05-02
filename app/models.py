@@ -7,7 +7,7 @@ group_members = db.Table('group_members',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('study_group_id', db.Integer, db.ForeignKey('study_group.id'), primary_key=True)
 )
-
+#Testing New DB branch
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)

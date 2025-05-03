@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Browse Listings{% endblock %}
+
 {% block content %}
   <h2>Browse Study Groups</h2>
-  <p>Test</p>
+
+  {% for g in study_groups %}
+    <div class="group-card">
+      <h3>{{ g.title }}</h3>
+      <p><strong>{{ g.subject }} {{ g.course }}</strong> — {{ g.time }}</p>
+      <p>{{ g.description }}</p>
+      <p>Tags: {{ g.tags }}</p>
+      <p>Owner: {{ g.owner.email }}</p>
+    </div>
+  {% else %}
+    <p>No study groups yet! <a href="{{ url_for('main.post_listing') }}">Create one</a>.</p>
+  {% endfor %}
 {% endblock %}

@@ -25,8 +25,10 @@ class RegisterForm(FlaskForm):
         
 
 class CreateStudyGroupForm(FlaskForm):
-    title = StringField('Group Title', validators=[DataRequired(), Length(max=100)])
-    subject = StringField('Subject/Course', validators=[DataRequired(), Length(max=100)])
-    tags = StringField('Tags (comma separated)', validators=[Length(max=200)])
-    session = StringField('Preferred Meeting Time', validators=[Length(max=100)])
-    submit = SubmitField('Create Group')
+    title = StringField('Title', validators=[DataRequired(), Length(max=100)])
+    subject = StringField('Subject', validators=[DataRequired(), Length(max=100)])
+    course = StringField('Course', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    time = StringField('Meeting Time', validators=[DataRequired(), Length(max=100)])
+    tags = StringField('Tags (comma-separated)', validators=[Length(max=200)])
+    submit = SubmitField('Create Study Group')

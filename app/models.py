@@ -10,13 +10,13 @@ group_members = db.Table('group_members',
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False) #username not required use email
     password = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(100))
     major = db.Column(db.String(100))
     is_admin = db.Column(db.Boolean, default=False)
     # New fields
-    username = db.Column(db.String(50), unique=True)
+    
     is_verified = db.Column(db.Boolean, default=False)
     
     # Relationships

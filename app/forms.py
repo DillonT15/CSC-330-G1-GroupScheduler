@@ -26,9 +26,22 @@ class RegisterForm(FlaskForm):
 
 class CreateStudyGroupForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(max=100)])
-    subject = StringField('Subject', validators=[DataRequired(), Length(max=100)])
+    # Dropdown for subject selection needs to be added to database - Also we may want a global enum list for this to not repeat
+    subject = SelectField(
+    'Subject',
+    choices=[
+        ('CS',   'Computer Science'),
+        ('MATH', 'Mathematics'),
+        ('PHYS', 'Physics'),
+        ('BIO',  'Biology'),
+        ('ENG',  'English'),
+        ('HIS', 'History'),
+        ('OTHER', 'Other')
+    ],
+    validators=[DataRequired()]
+    )
     course = StringField('Course', validators=[DataRequired(), Length(max=100)])
     description = TextAreaField('Description', validators=[DataRequired()])
-    time = StringField('Meeting Time', validators=[DataRequired(), Length(max=100)])
+    time = StringField('Meeting Time', validators=[DataRequired(), Length(max=100)]) # Should use a time picker or something
     tags = StringField('Tags (comma-separated)', validators=[Length(max=200)])
     submit = SubmitField('Create Study Group')

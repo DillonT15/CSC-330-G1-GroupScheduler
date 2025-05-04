@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, TextAreaField, Sele
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
 from app.models import User
 
+
 #Login/registration no longer requires username
 class LoginForm(FlaskForm):
     email = StringField('SCSU Email', validators=[DataRequired(), Email()])

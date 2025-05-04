@@ -1,15 +1,16 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, BooleanField
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
+from app.models import User
 
+#Login/registration no longer requires username
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('SCSU Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=4)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('SCSU Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
@@ -17,7 +18,12 @@ class RegisterForm(FlaskForm):
     def validate_email(self, email):
         if not email.data.endswith('@southernct.edu'):
             raise ValidationError('Please use your SCSU email (@southernct.edu)')
+        #Additional check to see if the email is already in the database. prevents duplicates
+        existing_user = User.query.filter_by(email=email.data).first()
+        if existing_user:
+            raise ValidationError('An account with this email already exists.')
         
+
 class CreateStudyGroupForm(FlaskForm):
     title = StringField('Group Title', validators=[DataRequired(), Length(max=100)])
     subject = StringField('Subject/Course', validators=[DataRequired(), Length(max=100)])

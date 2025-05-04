@@ -1,0 +1,7 @@
+__pycache__/
+# Ignore compiled Python files
+*.pyc
+instance/
+instance/app.db
+
+.DS_Store

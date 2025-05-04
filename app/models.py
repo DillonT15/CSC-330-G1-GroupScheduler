@@ -7,24 +7,14 @@ group_members = db.Table('group_members',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('study_group_id', db.Integer, db.ForeignKey('study_group.id'), primary_key=True)
 )
-#Testing New DB branch
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False) #username not required use email
     password = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(100))
     major = db.Column(db.String(100))
     is_admin = db.Column(db.Boolean, default=False)
-    # New fields
-    username = db.Column(db.String(50), unique=True)
-    is_verified = db.Column(db.Boolean, default=False)
-    
-    # Relationships
-    owned_groups = db.relationship('StudyGroup', backref='owner', foreign_keys='StudyGroup.op_id')
-    posts = db.relationship('Post', backref='author', foreign_keys='Post.user_id')
-    # Study groups that this user has joined
-    joined_groups = db.relationship('StudyGroup', secondary=group_members, 
-                                   backref=db.backref('members', lazy='dynamic'))
 
 class StudyGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)

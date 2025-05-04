@@ -1,28 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}Flask Login App{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Forum{% endblock %}</title>
+    <!-- Import Roboto font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!--Import stylesheet-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block extra_styles %}{% endblock %}
 </head>
 <body>
-  <nav>
-    {% if current_user.is_authenticated %}
-      <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('main.logout') }}">Logout</a></p>
-    {% else %}
-      <a href="{{ url_for('main.login') }}">Login</a> |
-      <a href="{{ url_for('main.register') }}">Register</a>
-    {% endif %}
-  </nav>
-  <hr>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-        {% for msg in messages %}
-          <li>{{ msg }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-  {% block content %}{% endblock %}
+    <nav>
+        <div class="nav-container">
+            <a href="{{ url_for('main.index') }}" class="nav-brand">Student Forum</a>
+            <div class="nav-links">
+                {% if current_user.is_authenticated %}
+                    <span>Welcome, {{ current_user.email }}</span>
+                    <a href="{{ url_for('main.index') }}">Home</a>
+                    <a href="{{ url_for('main.logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('main.index') }}">Home</a>
+                    <a href="{{ url_for('main.login') }}">Login</a>
+                    <a href="{{ url_for('main.register') }}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        &copy; {{ current_year }} Student Forum | CSC 330 Team 1
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

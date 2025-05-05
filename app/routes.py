@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db
 from .models import User
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, EditProfileForm
 
 bp = Blueprint('main', __name__)
 
@@ -56,9 +56,24 @@ def post_listing():
 def browse_listings():
     return render_template('browse_listings.html')
 
-@bp.route('/edit-profile')
+@bp.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
 def edit_profile():
-    return render_template('edit_profile.html')
+    form = EditProfileForm(obj=current_user)
+
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        current_user.major = form.major.data
+
+        # Handle optional password change
+        if form.new_password.data:
+            current_user.password = generate_password_hash(form.new_password.data)
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('main.edit_profile'))
+
+    return render_template('edit_profile.html', form=form)
 
 @bp.route('/notifications')
 def view_notifications():

@@ -3,7 +3,6 @@ from wtforms import StringField, PasswordField, SubmitField, TextAreaField, Sele
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
 from app.models import User
 
-
 #Login/registration no longer requires username
 class LoginForm(FlaskForm):
     email = StringField('SCSU Email', validators=[DataRequired(), Email()])
@@ -31,3 +30,10 @@ class CreateStudyGroupForm(FlaskForm):
     tags = StringField('Tags (comma separated)', validators=[Length(max=200)])
     session = StringField('Preferred Meeting Time', validators=[Length(max=100)])
     submit = SubmitField('Create Group')
+    
+class EditProfileForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=100)])
+    major = StringField('Major', validators=[Length(max=100)])
+    new_password = PasswordField('New Password', validators=[Length(min=6)], render_kw={"placeholder": "Leave blank to keep current password"})
+    confirm = PasswordField('Confirm New Password', validators=[EqualTo('new_password', message='Passwords must match')])
+    submit = SubmitField('Update Profile')

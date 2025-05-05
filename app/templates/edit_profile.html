@@ -31,6 +31,7 @@ content %}
     {{ form.confirm(class="form-control") }} {% for e in form.confirm.errors
     %}<span class="error">{{ e }}</span>{% endfor %}
   </div>
-  z {{ form.submit(class="btn btn-primary") }}
+
+  {{ form.submit(class="btn btn-primary") }}
 </form>
 {% endblock %}

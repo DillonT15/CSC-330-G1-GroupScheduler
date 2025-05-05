@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, BooleanField
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
-from app.models import User
+from app.models import *
+
 
 #Login/registration no longer requires username
 class LoginForm(FlaskForm):

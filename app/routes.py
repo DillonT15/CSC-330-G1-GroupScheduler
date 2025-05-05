@@ -75,6 +75,65 @@ def browse_listings():
     return render_template('browse_listings.html',
                            study_groups=study_groups)
 
+
+# ───────────────────────────────────────────────────────────
+#  JOIN / LEAVE
+# ───────────────────────────────────────────────────────────
+@bp.post("/join/<int:group_id>")
+@login_required
+def join_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    if group.add_member(current_user):
+        db.session.commit()
+        flash("Joined ✓", "success")
+    else:
+        flash("You’re already a member.", "info")
+    return redirect(request.referrer or url_for("main.browse_listings"))
+
+@bp.post("/leave/<int:group_id>")
+@login_required
+def leave_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    if group.remove_member(current_user):
+        db.session.commit()
+        flash("Left group.", "success")
+    return redirect(request.referrer or url_for("main.browse_listings"))
+
+# ───────────────────────────────────────────────────────────
+#  FAVORITE / UNFAVORITE
+# ───────────────────────────────────────────────────────────
+@bp.post("/favorite/<int:group_id>")
+@login_required
+def toggle_favorite(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    if group in current_user.favorite_groups:
+        current_user.favorite_groups.remove(group)
+        flash("Removed from favorites", "info")
+    else:
+        current_user.favorite_groups.append(group)
+        flash("★ Added to favorites", "success")
+    db.session.commit()
+    return redirect(request.referrer or url_for("main.browse_listings"))
+
+# ───────────────────────────────────────────────────────────
+#  “Joined Groups” & “Favorites” tabs
+# ───────────────────────────────────────────────────────────
+@bp.get("/joined")
+@login_required
+def joined_groups():
+    return render_template("browse_listings.html",
+                           study_groups=current_user.joined_groups,
+                           heading="My Study Groups")
+
+@bp.get("/favorites")
+@login_required
+def favorite_groups():
+    return render_template("browse_listings.html",
+                           study_groups=current_user.favorite_groups,
+                           heading="★ Favorites")
+
+
+
 #New Placeholder routes created for each functionality on main page
 
 @bp.route('/edit-profile')

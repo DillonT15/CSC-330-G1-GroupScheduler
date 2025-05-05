@@ -46,3 +46,10 @@ class CreateStudyGroupForm(FlaskForm):
     time = StringField('Meeting Time', validators=[DataRequired(), Length(max=100)]) # Should use a time picker or something
     tags = StringField('Tags (comma-separated)', validators=[Length(max=200)])
     submit = SubmitField('Create Study Group')
+
+class EditProfileForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=100)])
+    major = StringField('Major', validators=[Length(max=100)])
+    new_password = PasswordField('New Password', validators=[Length(min=6)], render_kw={"placeholder": "Leave blank to keep current password"})
+    confirm = PasswordField('Confirm New Password', validators=[EqualTo('new_password', message='Passwords must match')])
+    submit = SubmitField('Update Profile')

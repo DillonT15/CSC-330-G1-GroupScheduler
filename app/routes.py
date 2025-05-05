@@ -136,9 +136,24 @@ def favorite_groups():
 
 #New Placeholder routes created for each functionality on main page
 
-@bp.route('/edit-profile')
+@bp.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
 def edit_profile():
-    return render_template('edit_profile.html')
+    form = EditProfileForm(obj=current_user)
+
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        current_user.major = form.major.data
+
+        # Handle optional password change
+        if form.new_password.data:
+            current_user.password = generate_password_hash(form.new_password.data)
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('main.edit_profile'))
+
+    return render_template('edit_profile.html', form=form)
 
 @bp.route('/notifications')
 def view_notifications():

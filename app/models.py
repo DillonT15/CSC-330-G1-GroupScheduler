@@ -8,13 +8,6 @@ group_members = db.Table('group_members',
     db.Column('study_group_id', db.Integer, db.ForeignKey('study_group.id'), primary_key=True)
 )
 
-# Association table for many-to-many relationship between users and favorite groups
-favorite_groups = db.Table(
-    "favorite_groups",
-    db.Column("user_id",        db.Integer, db.ForeignKey("user.id"),         primary_key=True),
-    db.Column("study_group_id", db.Integer, db.ForeignKey("study_group.id"),  primary_key=True)
-)
- 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False) #username not required use email
@@ -23,10 +16,7 @@ class User(UserMixin, db.Model):
     major = db.Column(db.String(100))
     is_admin = db.Column(db.Boolean, default=False)
     # New fields
-<<<<<<< HEAD
     
-=======
->>>>>>> group-creation
     is_verified = db.Column(db.Boolean, default=False)
     
     # Relationships
@@ -35,12 +25,6 @@ class User(UserMixin, db.Model):
     # Study groups that this user has joined
     joined_groups = db.relationship('StudyGroup', secondary=group_members, 
                                    backref=db.backref('members', lazy='dynamic'))
-    
-    # Favorites tab and joined groups
-    joined_groups   = db.relationship("StudyGroup", secondary=group_members,
-                                      backref=db.backref("members", lazy="dynamic"))
-    favorite_groups = db.relationship("StudyGroup", secondary=favorite_groups,
-                                      backref=db.backref("fans",    lazy="dynamic"))
 
 class StudyGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)

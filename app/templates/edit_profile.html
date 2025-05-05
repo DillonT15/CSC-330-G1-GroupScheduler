@@ -1,6 +1,37 @@
-{% extends 'base.html' %}
-{% block title %}Edit Profile{% endblock %}
-{% block content %}
-  <h2>Edit Your Profile</h2>
-  <p>Test</p>
+{% extends 'base.html' %} {% block title %}Edit Profile{% endblock %} {% block
+content %}
+<h2>Edit Your Profile</h2>
+<form method="POST">
+  {{ form.hidden_tag() }}
+
+  <div class="form-group">
+    {{ form.name.label }}<br />
+    {{ form.name(class="form-control") }} {% for e in form.name.errors %}<span
+      class="error"
+      >{{ e }}</span
+    >{% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.major.label }}<br />
+    {{ form.major(class="form-control") }} {% for e in form.major.errors %}<span
+      class="error"
+      >{{ e }}</span
+    >{% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.new_password.label }}<br />
+    {{ form.new_password(class="form-control") }} {% for e in
+    form.new_password.errors %}<span class="error">{{ e }}</span>{% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.confirm.label }}<br />
+    {{ form.confirm(class="form-control") }} {% for e in form.confirm.errors
+    %}<span class="error">{{ e }}</span>{% endfor %}
+  </div>
+
+  {{ form.submit(class="btn btn-primary") }}
+</form>
 {% endblock %}

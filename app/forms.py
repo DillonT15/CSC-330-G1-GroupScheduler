@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, BooleanField
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
-from app.models import User
+from app.models import *
+
 
 #Login/registration no longer requires username
 class LoginForm(FlaskForm):
@@ -25,8 +26,23 @@ class RegisterForm(FlaskForm):
         
 
 class CreateStudyGroupForm(FlaskForm):
-    title = StringField('Group Title', validators=[DataRequired(), Length(max=100)])
-    subject = StringField('Subject/Course', validators=[DataRequired(), Length(max=100)])
-    tags = StringField('Tags (comma separated)', validators=[Length(max=200)])
-    session = StringField('Preferred Meeting Time', validators=[Length(max=100)])
-    submit = SubmitField('Create Group')
+    title = StringField('Title', validators=[DataRequired(), Length(max=100)])
+    # Dropdown for subject selection needs to be added to database - Also we may want a global enum list for this to not repeat
+    subject = SelectField(
+    'Subject',
+    choices=[
+        ('CS',   'Computer Science'),
+        ('MATH', 'Mathematics'),
+        ('PHYS', 'Physics'),
+        ('BIO',  'Biology'),
+        ('ENG',  'English'),
+        ('HIS', 'History'),
+        ('OTHER', 'Other')
+    ],
+    validators=[DataRequired()]
+    )
+    course = StringField('Course', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    time = StringField('Meeting Time', validators=[DataRequired(), Length(max=100)]) # Should use a time picker or something
+    tags = StringField('Tags (comma-separated)', validators=[Length(max=200)])
+    submit = SubmitField('Create Study Group')

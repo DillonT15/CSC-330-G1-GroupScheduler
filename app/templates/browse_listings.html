@@ -1,6 +1,54 @@
-{% extends 'base.html' %}
-{% block title %}Browse Listings{% endblock %}
+{% extends "base.html" %}
+{% block title %}{{ heading or "Browse Study Groups" }}{% endblock %}
 {% block content %}
-  <h2>Browse Study Groups</h2>
-  <p>Test</p>
+<h2 class="mb-3">{{ heading or "Browse Study Groups" }}</h2>
+
+<div class="sg-grid">
+  {% for g in study_groups %}
+  <div class="sg-card">
+    <!-- HEADER  (colored strip + title) -->
+    <div class="sg-card__header">
+      <h5 class="sg-card__title">{{ g.title }}</h5>
+    </div>
+
+    <!-- BODY -->
+    <div class="sg-card__body">
+      <p class="sg-meta mb-2">{{ g.course }} · {{ g.subject }}</p>
+      <p class="sg-desc">{{ g.description | truncate(120) }}</p>
+
+      <!-- TAGS -->
+      <div class="sg-tags">
+        {% for t in (g.tags or "").split(",") if t.strip() %}
+          <span class="badge sg-badge">{{ t.strip() }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- FOOTER  (buttons pinned to bottom) -->
+    <div class="sg-card__footer">
+      {% if g in current_user.joined_groups %}
+        <form action="{{ url_for('main.leave_group', group_id=g.id) }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-outline-danger btn-sm">Leave</button>
+        </form>
+      {% else %}
+        <form action="{{ url_for('main.join_group', group_id=g.id) }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-success btn-sm">+ Join</button>
+        </form>
+      {% endif %}
+
+      <form action="{{ url_for('main.toggle_favorite', group_id=g.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-outline-warning btn-sm">
+          {% if g in current_user.favorite_groups %}★{% else %}☆{% endif %}
+        </button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+    <p>No study groups yet – be the first to
+       <a href="{{ url_for('main.post_listing') }}">create one</a>!</p>
+  {% endfor %}
+</div>
 {% endblock %}

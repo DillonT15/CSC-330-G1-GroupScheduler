@@ -3,8 +3,8 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db
-from .models import User
-from .forms import LoginForm, RegisterForm
+from .models import * # Import all models from models.py
+from .forms import * # Import all forms from forms.py
 
 bp = Blueprint('main', __name__)
 
@@ -46,15 +46,95 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-
-#New Placeholder routes created for each functionality on main page
-@bp.route('/post-listing')
+@bp.route('/post-listing', methods=['GET','POST'])
+@login_required
 def post_listing():
-    return render_template('post_listing.html')
+    form = CreateStudyGroupForm()
+    if form.validate_on_submit():
+        group = StudyGroup(
+            title       = form.title.data,
+            subject     = form.subject.data,
+            course      = form.course.data,
+            description = form.description.data,
+            time        = form.time.data,
+            tags        = form.tags.data,
+            owner       = current_user
+        )
+        db.session.add(group)
+        db.session.commit()
+        flash('Study group created!', 'success')
+        return redirect(url_for('main.browse_listings'))
+    return render_template('post_listing.html', form=form)
+
 
 @bp.route('/browse')
+@login_required
 def browse_listings():
-    return render_template('browse_listings.html')
+    # pull all groups, most recent first
+    study_groups = StudyGroup.query.order_by(StudyGroup.created_at.desc()).all()
+    return render_template('browse_listings.html',
+                           study_groups=study_groups)
+
+
+# ───────────────────────────────────────────────────────────
+#  JOIN / LEAVE
+# ───────────────────────────────────────────────────────────
+@bp.post("/join/<int:group_id>")
+@login_required
+def join_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    if group.add_member(current_user):
+        db.session.commit()
+        flash("Joined ✓", "success")
+    else:
+        flash("You’re already a member.", "info")
+    return redirect(request.referrer or url_for("main.browse_listings"))
+
+@bp.post("/leave/<int:group_id>")
+@login_required
+def leave_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    if group.remove_member(current_user):
+        db.session.commit()
+        flash("Left group.", "success")
+    return redirect(request.referrer or url_for("main.browse_listings"))
+
+# ───────────────────────────────────────────────────────────
+#  FAVORITE / UNFAVORITE
+# ───────────────────────────────────────────────────────────
+@bp.post("/favorite/<int:group_id>")
+@login_required
+def toggle_favorite(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    if group in current_user.favorite_groups:
+        current_user.favorite_groups.remove(group)
+        flash("Removed from favorites", "info")
+    else:
+        current_user.favorite_groups.append(group)
+        flash("★ Added to favorites", "success")
+    db.session.commit()
+    return redirect(request.referrer or url_for("main.browse_listings"))
+
+# ───────────────────────────────────────────────────────────
+#  “Joined Groups” & “Favorites” tabs
+# ───────────────────────────────────────────────────────────
+@bp.get("/joined")
+@login_required
+def joined_groups():
+    return render_template("browse_listings.html",
+                           study_groups=current_user.joined_groups,
+                           heading="My Study Groups")
+
+@bp.get("/favorites")
+@login_required
+def favorite_groups():
+    return render_template("browse_listings.html",
+                           study_groups=current_user.favorite_groups,
+                           heading="★ Favorites")
+
+
+
+#New Placeholder routes created for each functionality on main page
 
 @bp.route('/edit-profile')
 def edit_profile():

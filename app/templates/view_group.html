@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ group.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ group.title }}</h2>
+<p><strong>Course:</strong> {{ group.course }}</p>
+<p><strong>Subject:</strong> {{ group.subject }}</p>
+<p><strong>Meeting Time:</strong> {{ group.time }}</p>
+<p><strong>Description:</strong> {{ group.description }}</p>
+
+<div class="sg-tags">
+  {% for t in (group.tags or "").split(",") if t.strip() %}
+    <span class="badge sg-badge">{{ t.strip() }}</span>
+  {% endfor %}
+</div>
+
+<!-- ───────── POST FORM ───────── -->
+ <!-- Contains all buttons and menus for creating a form-->
+<h3 class="mt-4">Create a Post</h3>
+<form method="POST">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{ form.title.label }}
+    {{ form.title(class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ form.description.label }}
+    {{ form.description(class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ form.meeting_time.label }}
+    {{ form.meeting_time(class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ form.submit(class="btn btn-primary") }}
+  </div>
+</form>
+
+<!-- ───────── POSTS LIST ───────── -->
+ <!--Lists out each created post in a list-->
+<h3 class="mt-5">Posts</h3>
+{% if posts %}
+  <ul class="post-list">
+    {% for post in posts %}
+      <li>
+        <h4>{{ post.title }}</h4>
+        <p><strong>By:</strong> {{ post.author.email }} | <strong>Meeting Time:</strong> {{ post.meeting_time }}</p>
+        <p>{{ post.description }}</p>
+        <small class="text-muted">Posted on {{ post.date_and_time.strftime('%Y-%m-%d %H:%M') }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No posts yet.</p>
+{% endif %}
+
+<a href="{{ url_for('main.browse_listings') }}" class="btn btn-secondary mt-3">Back to Listings</a>
+{% endblock %}

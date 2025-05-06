@@ -53,3 +53,10 @@ class EditProfileForm(FlaskForm):
     new_password = PasswordField('New Password', validators=[Length(min=6)], render_kw={"placeholder": "Leave blank to keep current password"})
     confirm = PasswordField('Confirm New Password', validators=[EqualTo('new_password', message='Passwords must match')])
     submit = SubmitField('Update Profile')
+
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[Length(max=1000)])
+    meeting_time = StringField('Meeting Time', validators=[Length(max=100)])
+    submit = SubmitField('Submit Post')

@@ -5,11 +5,25 @@
 
 <div class="sg-grid">
   {% for g in study_groups %}
-  <div class="sg-card">
+ 
+
+    
+    <div class="sg-card">
+
+
+      
     <!-- HEADER  (colored strip + title) -->
     <div class="sg-card__header">
-      <h5 class="sg-card__title">{{ g.title }}</h5>
+      <h5 class="sg-card__title">
+        {% if current_user in g.members %}
+          <a href="{{ url_for('main.view_group', group_id=g.id) }}">{{ g.title }}</a>
+        {% else %}
+          {{ g.title }}
+        {% endif %}
+      </h5>
     </div>
+    
+  </a>
 
     <!-- BODY -->
     <div class="sg-card__body">

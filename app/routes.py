@@ -88,6 +88,40 @@ def browse_listings():
                            study_groups=study_groups)
 
 
+@bp.route('/study_group/<int:group_id>', methods=['GET', 'POST'])
+@login_required
+def view_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    form = PostForm()
+    
+    if form.validate_on_submit():
+        # Make sure the group has a thread; if not, create one
+        thread = Thread.query.filter_by(study_group_id=group.id).first()
+        if not thread:
+            thread = Thread(title=f"Thread for {group.title}", study_group=group)
+            db.session.add(thread)
+            db.session.commit()
+
+        # Create the post
+        post = Post(
+            thread_id=thread.thread_id,
+            user_id=current_user.id,
+            title=form.title.data,
+            description=form.description.data,
+            meeting_time=form.meeting_time.data
+        )
+        db.session.add(post)
+        db.session.commit()
+        flash("Post submitted!", "success")
+        return redirect(url_for('main.view_group', group_id=group.id))
+
+    # Get posts related to the group's thread
+    thread = Thread.query.filter_by(study_group_id=group.id).first()
+    posts = thread.posts if thread else []
+
+    return render_template('view_group.html', group=group, form=form, posts=posts)
+
+
 # ───────────────────────────────────────────────────────────
 #  JOIN / LEAVE
 # ───────────────────────────────────────────────────────────

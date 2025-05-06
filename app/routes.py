@@ -8,9 +8,21 @@ from .forms import * # Import all forms from forms.py
 
 bp = Blueprint('main', __name__)
 
+
+#Defaults to login when not logged in, defaults to main listings when logged in
 @bp.route('/')
 def index():
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        return redirect(url_for('main.browse_listings'))
+    return redirect(url_for('main.login'))
+
+#New route /home created for top left home button. Only works if user is logged in.
+@bp.route('/home')
+def home():
+    if current_user.is_authenticated:
+        return render_template('home.html')
+    return redirect(url_for('main.login'))
+    
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():

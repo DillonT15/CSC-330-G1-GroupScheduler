@@ -201,6 +201,11 @@ def edit_profile():
 
     return render_template('edit_profile.html', form=form)
 
+@bp.route('/profile')
+@login_required
+def view_profile():
+    return render_template('view_profile.html')
+
 @bp.route('/notifications')
 def view_notifications():
     return render_template('notifications.html')

@@ -24,7 +24,9 @@
             <!-- links -->
             <div class="nav-links">
                 {% if current_user.is_authenticated %}
-                    <span class="welcome">Welcome, {{ current_user.email }}</span>
+                <span class="welcome">
+                    Welcome,<a href="{{ url_for('main.view_profile') }}">{{ current_user.email }}</a>
+                  </span>
 
                     <!-- study‑group navigation -->
                     <a href="{{ url_for('main.browse_listings') }}">All&nbsp;Groups</a>

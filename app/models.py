@@ -140,3 +140,12 @@ class Violation(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+class GroupChatMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey('study_group.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='group_chat_messages')
+    group = db.relationship('StudyGroup', backref='chat_messages')

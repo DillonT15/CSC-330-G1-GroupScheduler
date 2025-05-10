@@ -60,3 +60,7 @@ class PostForm(FlaskForm):
     description = TextAreaField('Description', validators=[Length(max=1000)])
     meeting_time = StringField('Meeting Time', validators=[Length(max=100)])
     submit = SubmitField('Submit Post')
+
+class ChatForm(FlaskForm):
+    message = StringField('Message', validators=[DataRequired(), Length(max=500)])
+    submit = SubmitField('Send')

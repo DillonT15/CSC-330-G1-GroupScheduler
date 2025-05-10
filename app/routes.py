@@ -88,38 +88,50 @@ def browse_listings():
                            study_groups=study_groups)
 
 
-@bp.route('/study_group/<int:group_id>', methods=['GET', 'POST'])
+@bp.route('/group/<int:group_id>', methods=['GET', 'POST'])
 @login_required
 def view_group(group_id):
     group = StudyGroup.query.get_or_404(group_id)
-    form = PostForm()
-    
-    if form.validate_on_submit():
-        # Make sure the group has a thread; if not, create one
-        thread = Thread.query.filter_by(study_group_id=group.id).first()
-        if not thread:
-            thread = Thread(title=f"Thread for {group.title}", study_group=group)
-            db.session.add(thread)
-            db.session.commit()
+    post_form = PostForm()
+    chat_form = ChatForm()
 
-        # Create the post
-        post = Post(
-            thread_id=thread.thread_id,
+    # Handle PostForm submission
+    if post_form.submit.data and post_form.validate_on_submit():
+        # Your existing logic for handling post creation
+        # Example:
+        thread = Thread.query.filter_by(study_group_id=group.id).first()
+        if thread:
+            new_post = Post(
+                content=post_form.content.data,
+                user_id=current_user.id,
+                thread_id=thread.id
+            )
+            db.session.add(new_post)
+            db.session.commit()
+            return redirect(url_for('main.view_group', group_id=group.id))
+
+    # Handle ChatForm submission
+    elif chat_form.submit.data and chat_form.validate_on_submit():
+        new_message = GroupChatMessage(
+            group_id=group.id,
             user_id=current_user.id,
-            title=form.title.data,
-            description=form.description.data,
-            meeting_time=form.meeting_time.data
+            content=chat_form.message.data
         )
-        db.session.add(post)
+        db.session.add(new_message)
         db.session.commit()
-        flash("Post submitted!", "success")
         return redirect(url_for('main.view_group', group_id=group.id))
 
-    # Get posts related to the group's thread
-    thread = Thread.query.filter_by(study_group_id=group.id).first()
-    posts = thread.posts if thread else []
+    posts = Post.query.join(Thread).filter(Thread.study_group_id == group.id).order_by(Post.date_and_time.desc()).all()
+    chat_messages = GroupChatMessage.query.filter_by(group_id=group.id).order_by(GroupChatMessage.timestamp.asc()).all()
 
-    return render_template('view_group.html', group=group, form=form, posts=posts)
+    return render_template(
+        'view_group.html',
+        group=group,
+        form=post_form,
+        chat_form=chat_form,
+        posts=posts,
+        chat_messages=chat_messages
+    )
 
 
 # ───────────────────────────────────────────────────────────

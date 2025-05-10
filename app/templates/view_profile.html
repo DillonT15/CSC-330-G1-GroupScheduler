@@ -8,6 +8,7 @@
     <li><strong>Name:</strong> {{ current_user.name or "Not set" }}</li>
     <li><strong>Major:</strong> {{ current_user.major or "Not set" }}</li>
     <li><strong>Verified:</strong> {{ "Yes" if current_user.is_verified else "No" }}</li>
+    <li><strong>Admin:</strong> {{ "Yes" if current_user.is_admin else "No" }}</li>
   </ul>
 
   <a href="{{ url_for('main.edit_profile') }}" class="btn btn-secondary mt-2">Edit Profile</a>

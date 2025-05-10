@@ -149,3 +149,15 @@ class GroupChatMessage(db.Model):
 
     user = db.relationship('User', backref='group_chat_messages')
     group = db.relationship('StudyGroup', backref='chat_messages')
+    
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)  # Make sure this is is_read not read
+    group_id = db.Column(db.Integer, db.ForeignKey('study_group.id'))
+    
+    # Relationships
+    user = db.relationship('User', backref='notifications')
+    group = db.relationship('StudyGroup', backref='notifications')

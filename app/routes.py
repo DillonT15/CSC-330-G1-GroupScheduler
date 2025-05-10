@@ -8,6 +8,19 @@ from .forms import * # Import all forms from forms.py
 
 bp = Blueprint('main', __name__)
 
+def create_notification(group_id, message):
+    """Create notifications for all members of a group except current user"""
+    group = StudyGroup.query.get(group_id)
+    if group:
+        for member in group.members:
+            if member.id != current_user.id:  # Don't notify the current user
+                notification = Notification(
+                    user_id=member.id,
+                    message=message,
+                    group_id=group_id
+                )
+                db.session.add(notification)
+        db.session.commit()
 
 #Defaults to login when not logged in, defaults to main listings when logged in
 @bp.route('/')
@@ -95,44 +108,39 @@ def view_group(group_id):
     post_form = PostForm()
     chat_form = ChatForm()
 
-    # Handle PostForm submission
+    #Handle PostForm submission
     if post_form.submit.data and post_form.validate_on_submit():
-        # Your existing logic for handling post creation
-        # Example:
+        # Get or create thread
         thread = Thread.query.filter_by(study_group_id=group.id).first()
-        if thread:
-            new_post = Post(
-                content=post_form.content.data,
-                user_id=current_user.id,
-                thread_id=thread.id
+        if not thread:
+            thread = Thread(
+                title="General Discussion",
+                study_group_id=group.id,
+                thread_content="General discussion for this study group"
             )
-            db.session.add(new_post)
+            db.session.add(thread)
             db.session.commit()
-            return redirect(url_for('main.view_group', group_id=group.id))
-
-    # Handle ChatForm submission
-    elif chat_form.submit.data and chat_form.validate_on_submit():
-        new_message = GroupChatMessage(
-            group_id=group.id,
+        
+        #Create new post
+        new_post = Post(
+            thread_id=thread.thread_id,
             user_id=current_user.id,
-            content=chat_form.message.data
+            title=post_form.title.data,
+            description=post_form.description.data,
+            meeting_time=post_form.meeting_time.data
         )
-        db.session.add(new_message)
+        db.session.add(new_post)
         db.session.commit()
+        
+        #Create notification for group members
+        create_notification(
+            group.id, 
+            f"New post in {group.title}: {post_form.title.data}"
+        )
+        
+        flash('Post created successfully!', 'success')
         return redirect(url_for('main.view_group', group_id=group.id))
-
-    posts = Post.query.join(Thread).filter(Thread.study_group_id == group.id).order_by(Post.date_and_time.desc()).all()
-    chat_messages = GroupChatMessage.query.filter_by(group_id=group.id).order_by(GroupChatMessage.timestamp.asc()).all()
-
-    return render_template(
-        'view_group.html',
-        group=group,
-        form=post_form,
-        chat_form=chat_form,
-        posts=posts,
-        chat_messages=chat_messages
-    )
-
+        
 
 # ───────────────────────────────────────────────────────────
 #  JOIN / LEAVE
@@ -219,5 +227,29 @@ def view_profile():
     return render_template('view_profile.html')
 
 @bp.route('/notifications')
+@login_required
 def view_notifications():
-    return render_template('notifications.html')
+    notifications = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.timestamp.desc()).all()
+    return render_template('notifications.html', notifications=notifications)
+
+@bp.route('/mark-read/<int:notification_id>')
+@login_required
+def mark_notification_read(notification_id):
+    notification = Notification.query.get_or_404(notification_id)
+    if notification.user_id == current_user.id:
+        notification.is_read = True  # Use is_read instead of read
+        db.session.commit()
+        if notification.group_id:
+            return redirect(url_for('main.view_group', group_id=notification.group_id))
+    return redirect(url_for('main.view_notifications'))
+
+@bp.route('/mark-all-read')
+@login_required
+def mark_all_read():
+    Notification.query.filter_by(user_id=current_user.id, is_read=False).update({'is_read': True})
+    db.session.commit()
+    flash('All notifications marked as read', 'success')
+    return redirect(url_for('main.view_notifications'))
+
+
+

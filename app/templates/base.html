@@ -1,66 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Student Forum{% endblock %}</title>
 
     <!-- Roboto font -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Main stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
 
     {% block extra_styles %}{% endblock %}
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- ───────── NAVBAR ───────── -->
     <nav>
-        <div class="nav-container">
-            <!-- brand -->
-            <a href="{{ url_for('main.home') }}" class="nav-brand">Student Forum</a>
+      <div class="nav-container">
+        <!-- brand -->
+        <a href="{{ url_for('main.home') }}" class="nav-brand">Student Forum</a>
 
-            <!-- links -->
-            <div class="nav-links">
-                {% if current_user.is_authenticated %}
-                <span class="welcome">
-                    Welcome,<a href="{{ url_for('main.view_profile') }}">{{ current_user.email }}</a>
-                  </span>
+        <!-- links -->
+        <div class="nav-links">
+          {% if current_user.is_authenticated %}
+          <span class="welcome">
+            Welcome,<a href="{{ url_for('main.view_profile') }}"
+              >{{ current_user.email }}</a
+            >
+          </span>
 
-                    <!-- study‑group navigation -->
-                    <a href="{{ url_for('main.browse_listings') }}">All&nbsp;Groups</a>
-                    <a href="{{ url_for('main.joined_groups') }}">Joined</a>
-                    <a href="{{ url_for('main.favorite_groups') }}">Favorites&nbsp;★</a>
+          <!-- study‑group navigation -->
+          <a href="{{ url_for('main.browse_listings') }}">All&nbsp;Groups</a>
+          <a href="{{ url_for('main.joined_groups') }}">Joined</a>
+          <a href="{{ url_for('main.favorite_groups') }}">Favorites&nbsp;★</a>
 
-                    <!-- account -->
-                    <a href="{{ url_for('main.logout') }}">Logout</a>
-                {% else %}
-                    <a href="{{ url_for('main.index') }}">Home</a>
-                    <a href="{{ url_for('main.login') }}">Login</a>
-                    <a href="{{ url_for('main.register') }}">Register</a>
-                {% endif %}
-            </div>
+          <!-- notifications and admin links -->
+          <a href="{{ url_for('main.view_notifications') }}">
+            Notifications {% if notification_count > 0 %}
+            <span class="notification-badge">{{ notification_count }}</span>
+            {% endif %}
+          </a>
+          {% if current_user.is_admin %}
+          <a href="{{ url_for('admin.index') }}">Admin</a>
+          {% endif %}
+
+          <!-- account -->
+          <a href="{{ url_for('main.logout') }}">Logout</a>
+          {% else %}
+          <a href="{{ url_for('main.index') }}">Home</a>
+          <a href="{{ url_for('main.login') }}">Login</a>
+          <a href="{{ url_for('main.register') }}">Register</a>
+          {% endif %}
         </div>
+      </div>
     </nav>
     <!-- ────────────────────────── -->
 
     <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, msg in messages %}
-              <div class="alert alert-{{ category }}">{{ msg }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        {% block content %}{% endblock %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, msg in messages %}
+      <div class="alert alert-{{ category }}">{{ msg }}</div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
     </div>
 
-    <footer>
-        &copy; {{ current_year }} Student Forum | CSC 330 Team 1
-    </footer>
+    <footer>&copy; {{ current_year }} Student Forum | CSC 330 Team 1</footer>
 
     {% block extra_scripts %}{% endblock %}
-</body>
+  </body>
 </html>

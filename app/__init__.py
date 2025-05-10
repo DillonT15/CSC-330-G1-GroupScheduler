@@ -31,6 +31,20 @@ def create_app():
     # blueprints
     from . import routes
     app.register_blueprint(routes.bp)
+    
+    # admin blueprint
+    from . import admin
+    app.register_blueprint(admin.admin_bp)
+    
+    # Global context processor for notification count
+    @app.context_processor
+    def notification_count():
+        from flask_login import current_user
+        if current_user.is_authenticated:
+            from .models import Notification
+            count = Notification.query.filter_by(user_id=current_user.id, is_read=False).count()
+            return {'notification_count': count}
+        return {'notification_count': 0}
 
     # create tables if they don't exist
     with app.app_context():

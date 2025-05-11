@@ -1,6 +1,34 @@
-{% extends 'base.html' %}
-{% block title %}Notifications{% endblock %}
-{% block content %}
-  <h2>Your Notifications</h2>
-  <p>Test</p>
-{% endblock %}
+{% extends 'base.html' %} {% block title %}Notifications{% endblock %} {% block
+content %}
+<h2>Your Notifications</h2>
+
+{% if notifications %}
+<a href="{{ url_for('main.mark_all_read') }}" class="btn btn-primary mb-3"
+  >Mark All as Read</a
+>
+
+<div class="notification-list">
+  {% for notification in notifications %}
+  <div
+    class="notification-item {% if not notification.is_read %}unread{% endif %}"
+  >
+    <div class="notification-content">
+      <p>{{ notification.message }}</p>
+      <small class="text-muted"
+        >{{ notification.timestamp.strftime('%Y-%m-%d %H:%M') }}</small
+      >
+    </div>
+    <div class="notification-actions">
+      <a
+        href="{{ url_for('main.mark_notification_read', notification_id=notification.id) }}"
+        class="btn btn-sm btn-outline-primary"
+      >
+        View
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p>No notifications yet.</p>
+{% endif %} {% endblock %}

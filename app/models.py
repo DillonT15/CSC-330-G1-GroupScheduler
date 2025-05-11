@@ -28,9 +28,7 @@ class User(UserMixin, db.Model):
     # Relationships
     owned_groups = db.relationship('StudyGroup', backref='owner', foreign_keys='StudyGroup.op_id')
     posts = db.relationship('Post', backref='author', foreign_keys='Post.user_id')
-    # Study groups that this user has joined
-    joined_groups = db.relationship('StudyGroup', secondary=group_members, 
-                                   backref=db.backref('members', lazy='dynamic'))
+
     
     # Favorites tab and joined groups
     joined_groups   = db.relationship("StudyGroup", secondary=group_members,
@@ -149,3 +147,15 @@ class GroupChatMessage(db.Model):
 
     user = db.relationship('User', backref='group_chat_messages')
     group = db.relationship('StudyGroup', backref='chat_messages')
+    
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)  # Make sure this is is_read not read
+    group_id = db.Column(db.Integer, db.ForeignKey('study_group.id'))
+    
+    # Relationships
+    user = db.relationship('User', backref='notifications')
+    group = db.relationship('StudyGroup', backref='notifications')

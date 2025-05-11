@@ -108,7 +108,7 @@ def view_group(group_id):
     post_form = PostForm()
     chat_form = ChatForm()
 
-    #Handle PostForm submission
+    # Handle PostForm submission
     if post_form.submit.data and post_form.validate_on_submit():
         # Get or create thread
         thread = Thread.query.filter_by(study_group_id=group.id).first()
@@ -121,7 +121,7 @@ def view_group(group_id):
             db.session.add(thread)
             db.session.commit()
         
-        #Create new post
+        # Create new post
         new_post = Post(
             thread_id=thread.thread_id,
             user_id=current_user.id,
@@ -132,7 +132,7 @@ def view_group(group_id):
         db.session.add(new_post)
         db.session.commit()
         
-        #Create notification for group members
+        # Create notification for group members
         create_notification(
             group.id, 
             f"New post in {group.title}: {post_form.title.data}"
@@ -140,7 +140,31 @@ def view_group(group_id):
         
         flash('Post created successfully!', 'success')
         return redirect(url_for('main.view_group', group_id=group.id))
-        
+    
+    # Handle ChatForm submission
+    elif chat_form.submit.data and chat_form.validate_on_submit():
+        new_message = GroupChatMessage(
+            group_id=group.id,
+            user_id=current_user.id,
+            content=chat_form.message.data
+        )
+        db.session.add(new_message)
+        db.session.commit()
+        return redirect(url_for('main.view_group', group_id=group.id))
+
+    # Get posts and chat messages
+    posts = Post.query.join(Thread).filter(Thread.study_group_id == group.id).order_by(Post.date_and_time.desc()).all()
+    chat_messages = GroupChatMessage.query.filter_by(group_id=group.id).order_by(GroupChatMessage.timestamp.asc()).all()
+    
+    # Render template with all needed data
+    return render_template(
+        'view_group.html',
+        group=group,
+        form=post_form,
+        chat_form=chat_form,
+        posts=posts,
+        chat_messages=chat_messages
+    )
 
 # ───────────────────────────────────────────────────────────
 #  JOIN / LEAVE

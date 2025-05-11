@@ -28,9 +28,7 @@ class User(UserMixin, db.Model):
     # Relationships
     owned_groups = db.relationship('StudyGroup', backref='owner', foreign_keys='StudyGroup.op_id')
     posts = db.relationship('Post', backref='author', foreign_keys='Post.user_id')
-    # Study groups that this user has joined
-    joined_groups = db.relationship('StudyGroup', secondary=group_members, 
-                                   backref=db.backref('members', lazy='dynamic'))
+
     
     # Favorites tab and joined groups
     joined_groups   = db.relationship("StudyGroup", secondary=group_members,

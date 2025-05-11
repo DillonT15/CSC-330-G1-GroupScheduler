@@ -428,3 +428,113 @@ footer {
   color: white;
   text-decoration: none;
 }
+
+/* ───── View Group Page Styles ───── */
+/* Group header styles */
+.group-header {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .group-title {
+    color: #007bff;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 0.5rem;
+  }
+  
+  .group-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .meta-item {
+    margin-bottom: 0.5rem;
+  }
+  
+  .meta-label {
+    font-weight: 500;
+    color: #555;
+  }
+  
+  /* Section styles */
+  .section-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 0.5rem;
+  }
+  
+  .section-title {
+    color: #333;
+    font-size: 1.3rem;
+    margin: 0;
+  }
+  
+  /* Chat styles */
+  .chat-message {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    background-color: #f2f7ff;
+  }
+  
+  .chat-author {
+    font-weight: 500;
+    color: #007bff;
+  }
+  
+  .chat-content {
+    margin: 0.5rem 0;
+  }
+  
+  .chat-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+  
+  /* Posts styles */
+  .post-item {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  .post-item:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  }
+  
+  .post-title {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .post-meta {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.75rem;
+  }
+  
+  .post-list {
+    margin-top: 1rem;
+  }

@@ -3,7 +3,7 @@
 {% block content %}
   <h2>Reported Study Groups</h2>
   {% for report in reports %}
-    <div class="card my-3 p-3">
+    <div class="card p-3" style="margin: 1rem 0;">
       <strong>Group:</strong> {{ report.group.title }}<br>
       <strong>Reported by:</strong> {{ report.reporter.email }}<br>
       <strong>Owned by:</strong> {{ report.group.owner.email }}<br>

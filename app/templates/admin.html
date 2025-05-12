@@ -1,56 +1,65 @@
-{% extends "base.html" %} {% block title %}Admin Panel{% endblock %} {% block
-content %}
-<h2>Admin Panel - User Management</h2>
+{% extends 'base.html' %}
+{% block title %}Admin Panel{% endblock %}
 
+{% block content %}
+<div class="section-card">
+  <div class="section-header">
+    <h2 class="section-title">Admin Panel – User Management</h2>
+  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Name</th>
-      <th>Admin Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for user in users %}
-    <tr>
-      <td>{{ user.email }}</td>
-      <td>{{ user.name or "Not set" }}</td>
-      <td>{% if user.is_admin %} Admin {% else %} Regular User {% endif %}</td>
-      <td>
-        <form
-          action="{{ url_for('admin.toggle_admin', uid=user.id) }}"
-          method="post"
-          style="display: inline"
-        >
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-          <button
-            class="btn btn-sm {% if user.is_admin %}btn-outline-warning{% else %}btn-outline-primary{% endif %}"
-          >
-            {% if user.is_admin %}Remove Admin{% else %}Make Admin{% endif %}
-          </button>
-        </form>
-        {% if current_user.id != user.id %}
-        <form
-          action="{{ url_for('admin.ban_user', uid=user.id) }}"
-          method="post"
-          style="display: inline"
-        >
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-          <button
-            class="btn btn-sm btn-outline-danger"
-            onclick="return confirm('Are you sure you want to ban this user? This will delete their account.');"
-          >
-            Ban User
-          </button>
-        </form>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-  
-</table>
-<a href="{{ url_for('admin.group_reports') }}" class="btn btn-outline-secondary mb-3">View Group Reports</a>
+  <div class="table-responsive">
+    <table class="table-custom">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.email }}</td>
+          <td>{{ user.name or "Not set" }}</td>
+          <td>
+            {% if user.is_admin %}
+              <span class="badge bg-secondary">Admin</span>
+            {% else %}
+              <span class="badge bg-secondary">User</span>
+            {% endif %}
+          </td>
+          <td class="d-flex gap-2">
+            <form action="{{ url_for('admin.toggle_admin', uid=user.id) }}"
+                  method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit"
+                      class="btn btn-sm {% if user.is_admin %}btn-outline-warning{% else %}btn-outline-primary{% endif %}">
+                {% if user.is_admin %}Revoke Admin{% else %}Make Admin{% endif %}
+              </button>
+            </form>
+
+            {% if current_user.id != user.id %}
+            <form action="{{ url_for('admin.ban_user', uid=user.id) }}"
+                  method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit"
+                      class="btn btn-sm btn-outline-danger"
+                      onclick="return confirm('Ban this user? This will delete their account.');">
+                Ban User
+              </button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="{{ url_for('admin.group_reports') }}"
+     class="btn btn-secondary mt-4">
+    View Group Reports
+  </a>
+</div>
 {% endblock %}

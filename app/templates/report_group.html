@@ -1,13 +1,26 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block title %}Report Group{% endblock %}
+
 {% block content %}
-  <h2>Report "{{ group.title }}"</h2>
+<div class="section-card mx-auto" style="max-width: 500px;">
+  <div class="section-header">
+    <h2 class="section-title">Report "{{ group.title }}"</h2>
+  </div>
+
   <form method="POST">
     {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.reason.label }}
-      {{ form.reason(class="form-control") }}
+    
+    <div class="form-group mb-3">
+      {{ form.reason.label(class="form-label") }}
+      {{ form.reason(class="form-control", rows="4", placeholder="Describe the issue…") }}
+      {% for err in form.reason.errors %}
+        <small class="form-error">{{ err }}</small>
+      {% endfor %}
     </div>
-    {{ form.submit(class="btn btn-danger mt-2") }}
+    
+    <button type="submit" class="btn btn-outline-danger form-submit">
+      {{ form.submit.label.text }}
+    </button>
   </form>
+</div>
 {% endblock %}

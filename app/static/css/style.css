@@ -538,3 +538,31 @@ footer {
   .post-list {
     margin-top: 1rem;
   }
+
+/* profile page styles */
+.form-error {
+    display: block;
+    margin-top: 0.25rem;
+    color: #dc3545;
+    font-size: 0.85rem;
+  }
+.profile-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+  }
+  .profile-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .profile-label {
+    font-weight: 500;
+    color: #555;
+  }
+  .profile-value {
+    font-weight: 600;
+    color: #1c1c1c;
+  }
+  

@@ -2,14 +2,21 @@
 {% block title %}Your Profile{% endblock %}
 
 {% block content %}
-  <h2>Your Profile</h2>
-  <ul class="profile-info">
-    <li><strong>Email:</strong> {{ current_user.email }}</li>
-    <li><strong>Name:</strong> {{ current_user.name or "Not set" }}</li>
-    <li><strong>Major:</strong> {{ current_user.major or "Not set" }}</li>
-    <li><strong>Verified:</strong> {{ "Yes" if current_user.is_verified else "No" }}</li>
-    <li><strong>Admin:</strong> {{ "Yes" if current_user.is_admin else "No" }}</li>
+<div class="form-wrapper">
+  <h2 class="form-heading">Your Profile</h2>
+
+  <ul class="profile-list">
+    <li><span class="profile-label">Email:</span> <span class="profile-value">{{ current_user.email }}</span></li>
+    <li><span class="profile-label">Name:</span> <span class="profile-value">{{ current_user.name or "Not set" }}</span></li>
+    <li><span class="profile-label">Major:</span> <span class="profile-value">{{ current_user.major or "Not set" }}</span></li>
+    <li><span class="profile-label">Verified:</span>
+      <span class="profile-value">{{ "Yes" if current_user.is_verified else "No" }}</span>
+    </li>
+    <li><span class="profile-label">Admin:</span>
+      <span class="profile-value">{{ "Yes" if current_user.is_admin else "No" }}</span>
+    </li>
   </ul>
 
-  <a href="{{ url_for('main.edit_profile') }}" class="btn btn-secondary mt-2">Edit Profile</a>
+  <a href="{{ url_for('main.edit_profile') }}" class="form-submit">Edit Profile</a>
+</div>
 {% endblock %}

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
 from . import db
-from .models import User, StudyGroup, Post
+from .models import User, StudyGroup, Post, GroupChatMessage
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -45,20 +45,24 @@ def toggle_admin(uid):
 def ban_user(uid):
     """Ban a user by deleting their account"""
     user = User.query.get_or_404(uid)
-    
+
     # Prevent banning self
     if user.id == current_user.id:
         flash("You cannot ban yourself.", "danger")
         return redirect(url_for("admin.users"))
-    
+
     email = user.email
-    
-    # Remove the user's owned groups
+
+    # ✅ Delete related group chat messages
+    db.session.query(GroupChatMessage).filter_by(user_id=user.id).delete()
+
+    # ✅ Remove the user's owned groups
     for group in user.owned_groups:
         db.session.delete(group)
-    
+
+    # ✅ Now delete the user
     db.session.delete(user)
     db.session.commit()
-    
+
     flash(f"User {email} has been banned and their account removed.", "success")
     return redirect(url_for("admin.users"))

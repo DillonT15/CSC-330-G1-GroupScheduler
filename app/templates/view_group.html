@@ -33,6 +33,30 @@ block content %}
   </div>
 </div>
 
+<!-- ──────── Show group owner and members ──────── -->
+<div class="section-card mt-4">
+  <div class="section-header">
+    <h2 class="section-title">Group Members</h2>
+  </div>
+
+  <div class="group-owner">
+    <strong>Owner:</strong>
+    <span>{{ group.owner.email }}</span>
+  </div>
+
+  <div class="group-members mt-2">
+    <strong>Members:</strong>
+    <ul>
+      {% for member in group.members %}
+        {% if member.id != group.owner.id %}
+        <li>{{ member.email }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<!-- ───────────────────────────────────────────── -->
+
 <!-- Group Chat Section -->
 <div class="section-card">
   <div class="section-header">
@@ -59,8 +83,7 @@ block content %}
   <form method="POST" class="mt-3">
     {{ chat_form.hidden_tag() }}
     <div class="form-group">
-      {{ chat_form.message(class="form-control", placeholder="Write a
-      message...") }}
+      {{ chat_form.message(class="form-control", placeholder="Write a message...") }}
     </div>
     {{ chat_form.submit(class="btn btn-primary mt-2") }}
   </form>

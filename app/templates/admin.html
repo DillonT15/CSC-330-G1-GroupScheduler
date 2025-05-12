@@ -2,6 +2,7 @@
 content %}
 <h2>Admin Panel - User Management</h2>
 
+
 <table class="table">
   <thead>
     <tr>
@@ -49,5 +50,7 @@ content %}
     </tr>
     {% endfor %}
   </tbody>
+  
 </table>
+<a href="{{ url_for('admin.group_reports') }}" class="btn btn-outline-secondary mb-3">View Group Reports</a>
 {% endblock %}

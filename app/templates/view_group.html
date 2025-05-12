@@ -2,8 +2,10 @@
 block content %}
 <!-- Group Header -->
 <div class="group-header">
-  <h1 class="group-title">{{ group.title }}</h1>
-
+  <h1 class="group-title">{{ group.title }}                    </h1>
+  <h2>   <a href="{{ url_for('main.report_group', group_id=group.id) }}" title="Report this group">
+  🚩 Report
+</a></h2>
   <div class="group-meta">
     <div class="meta-item">
       <span class="meta-label">Course:</span>
@@ -31,6 +33,7 @@ block content %}
     <span class="badge sg-badge">{{ t.strip() }}</span>
     {% endfor %}
   </div>
+
 </div>
 
 <!-- ──────── Show group owner and members ──────── -->

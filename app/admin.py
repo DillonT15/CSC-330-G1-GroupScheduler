@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
 from . import db
-from .models import User, StudyGroup, Post, GroupChatMessage
+from .models import User, StudyGroup, Post, GroupChatMessage, Report
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -66,3 +66,9 @@ def ban_user(uid):
 
     flash(f"User {email} has been banned and their account removed.", "success")
     return redirect(url_for("admin.users"))
+
+@admin_bp.route("/group-reports")
+def group_reports():
+    reports = Report.query.filter(Report.group_id.isnot(None)).order_by(Report.created_at.desc()).all()
+    return render_template("admin_group_reports.html", reports=reports)
+

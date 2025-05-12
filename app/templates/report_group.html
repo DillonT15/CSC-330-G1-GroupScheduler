@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Report Group{% endblock %}
+{% block content %}
+  <h2>Report "{{ group.title }}"</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.reason.label }}
+      {{ form.reason(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-danger mt-2") }}
+  </form>
+{% endblock %}

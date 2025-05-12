@@ -107,10 +107,14 @@ class Report(db.Model):
     reason = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
+   
+    group_id = db.Column(db.Integer, db.ForeignKey('study_group.id'))
+
     # Relationships
     reporter = db.relationship('User', foreign_keys=[reporter_id], backref='filed_reports')
     violator = db.relationship('User', foreign_keys=[violator_id], backref='received_reports')
+    group = db.relationship('StudyGroup', backref='reports')
 
 class ViolationType(db.Model):
     violation_code = db.Column(db.Integer, primary_key=True)

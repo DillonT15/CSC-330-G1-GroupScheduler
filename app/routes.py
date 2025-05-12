@@ -277,3 +277,22 @@ def mark_all_read():
 
 
 
+@bp.route('/report-group/<int:group_id>', methods=['GET', 'POST'])
+@login_required
+def report_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    form = ReportGroupForm()
+
+    if form.validate_on_submit():
+        report = Report(
+            reporter_id=current_user.id,
+            violator_id=group.owner.id,
+            reason=form.reason.data,
+            group_id=group.id
+        )
+        db.session.add(report)
+        db.session.commit()
+        flash("Your report has been submitted.", "success")
+        return redirect(url_for('main.view_group', group_id=group_id))
+
+    return render_template("report_group.html", form=form, group=group)

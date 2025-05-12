@@ -64,3 +64,7 @@ class PostForm(FlaskForm):
 class ChatForm(FlaskForm):
     message = StringField('Message', validators=[DataRequired(), Length(max=500)])
     submit = SubmitField('Send')
+
+class ReportGroupForm(FlaskForm):
+    reason = TextAreaField("Reason", validators=[DataRequired(), Length(min=5)])
+    submit = SubmitField("Submit Report")

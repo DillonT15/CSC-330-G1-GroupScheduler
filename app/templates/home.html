@@ -1,15 +1,100 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
+
+{% block extra_styles %}
+<style>
+  /* Hero section */
+  .hero {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: #007bff;
+    color: #fff;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* Feature grid */
+  .feature-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .feature-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  }
+  .feature-icon {
+    font-size: 2.25rem;
+    color: #007bff;
+    margin-bottom: 0.75rem;
+  }
+  .feature-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .feature-desc {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-  <h1>SCSU Study Group Scheduler</h1>
+  <div class="hero">
+    <h1>Welcome to SCSU Study Scheduler</h1>
+    <p>Connect with classmates, form study groups, and stay on top of your coursework. Let’s make studying social!</p>
+    <a href="{{ url_for('main.post_listing') }}" class="btn btn-success btn-lg">Post a New Group</a>
+  </div>
 
-  <ul>
-    <!--Redirects for each route/feature. Change to button or menu later-->
-    <li><a href="{{ url_for('main.post_listing') }}">Post Study Group Listing</a></li>
-    <li><a href="{{ url_for('main.browse_listings') }}">Browse Study Groups</a></li>
-    <li><a href="{{ url_for('main.edit_profile') }}">Edit Profile</a></li>
-    <li><a href="{{ url_for('main.view_notifications') }}">View Notifications/Messages</a></li>
-  </ul>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <div class="feature-title">Browse Groups</div>
+      <div class="feature-desc">See all available study groups, filter by subject, and find your perfect match.</div>
+      <a href="{{ url_for('main.browse_listings') }}" class="btn btn-outline-primary btn-sm">Explore</a>
+    </div>
 
-  
+    <div class="feature-card">
+      <div class="feature-icon">➕</div>
+      <div class="feature-title">Create Listing</div>
+      <div class="feature-desc">Start your own study group—set the subject, time, and invite classmates.</div>
+      <a href="{{ url_for('main.post_listing') }}" class="btn btn-outline-primary btn-sm">Create</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">👤</div>
+      <div class="feature-title">Your Profile</div>
+      <div class="feature-desc">Update your personal details, change your password, and manage your settings.</div>
+      <a href="{{ url_for('main.edit_profile') }}" class="btn btn-outline-primary btn-sm">Manage</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-title">Notifications</div>
+      <div class="feature-desc">View new messages, group invites, and stay up to date on all activity.</div>
+      <a href="{{ url_for('main.view_notifications') }}" class="btn btn-outline-primary btn-sm">View</a>
+    </div>
+  </div>
 {% endblock %}

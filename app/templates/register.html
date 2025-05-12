@@ -1,35 +1,39 @@
 {% extends 'base.html' %}
-{% block title %}Your Profile{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="form-wrapper profile-card">
-  <h2 class="form-heading">Your Profile</h2>
+  <div class="form-wrapper">
+    <h2 class="form-heading">Create an Account</h2>
+    <form method="POST">
+      {{ form.hidden_tag() }}
 
-  <div class="profile-item">
-    <span class="profile-label">Email</span>
-    <span class="profile-value">{{ current_user.email }}</span>
+      <div class="form-group">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control", placeholder="Enter your SCSU email") }}
+        {% for error in form.email.errors %}
+          <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control", placeholder="Enter a password") }}
+        {% for error in form.password.errors %}
+          <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        {{ form.confirm.label(class="form-label") }}
+        {{ form.confirm(class="form-control", placeholder="Confirm your password") }}
+        {% for error in form.confirm.errors %}
+          <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        {{ form.submit(class="form-submit") }}
+      </div>
+    </form>
   </div>
-
-  <div class="profile-item">
-    <span class="profile-label">Name</span>
-    <span class="profile-value">{{ current_user.name or "Not set" }}</span>
-  </div>
-
-  <div class="profile-item">
-    <span class="profile-label">Major</span>
-    <span class="profile-value">{{ current_user.major or "Not set" }}</span>
-  </div>
-
-  <div class="profile-item">
-    <span class="profile-label">Verified</span>
-    <span class="profile-value">{{ "Yes" if current_user.is_verified else "No" }}</span>
-  </div>
-
-  <div class="profile-item">
-    <span class="profile-label">Admin</span>
-    <span class="profile-value">{{ "Yes" if current_user.is_admin else "No" }}</span>
-  </div>
-
-  <a href="{{ url_for('main.edit_profile') }}" class="form-submit mt-4">Edit Profile</a>
-</div>
 {% endblock %}
